@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.time.Duration;
 
 @Service
@@ -17,36 +16,27 @@ public class UrlShortenerService {
     private static final String BASE62 =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-    private static final int SHORT_CODE_LENGTH = 6;
-    private static final int MAX_RETRIES = 5;
-
     private final UrlMappingRepository urlMappingRepository;
     private final StringRedisTemplate redisTemplate;
 
-    private final SecureRandom secureRandom = new SecureRandom();
-
     public String createShortUrl(String longUrl) {
 
-        for (int attempt = 0; attempt < MAX_RETRIES; attempt++) {
+        Long nextId = redisTemplate.opsForValue()
+                .increment("global:url:id");
 
-            String shortCode = generateShortCode();
-
-            if (urlMappingRepository.existsByShortCode(shortCode)) {
-                continue;
-            }
-
-            UrlMapping mapping = new UrlMapping();
-            mapping.setLongUrl(longUrl);
-            mapping.setShortCode(shortCode);
-
-            urlMappingRepository.save(mapping);
-
-            return shortCode;
+        if (nextId == null) {
+            throw new RuntimeException("Unable to generate unique ID");
         }
 
-        throw new RuntimeException(
-                "Unable to generate a unique short code after "
-                        + MAX_RETRIES + " attempts");
+        String shortCode = encodeBase62(nextId);
+
+        UrlMapping mapping = new UrlMapping();
+        mapping.setLongUrl(longUrl);
+        mapping.setShortCode(shortCode);
+
+        urlMappingRepository.save(mapping);
+
+        return shortCode;
     }
 
     public String getLongUrl(String shortCode) {
@@ -70,18 +60,24 @@ public class UrlShortenerService {
         return longUrl;
     }
 
-    private String generateShortCode() {
+    private String encodeBase62(long value) {
+
+        if (value == 0) {
+            return "A";
+        }
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < SHORT_CODE_LENGTH; i++) {
+        while (value > 0) {
             sb.append(
                     BASE62.charAt(
-                            secureRandom.nextInt(BASE62.length())
+                            (int) (value % BASE62.length())
                     )
             );
+
+            value /= BASE62.length();
         }
 
-        return sb.toString();
+        return sb.reverse().toString();
     }
 }
