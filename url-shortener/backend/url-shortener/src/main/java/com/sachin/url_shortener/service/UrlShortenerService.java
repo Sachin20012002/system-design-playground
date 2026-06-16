@@ -4,9 +4,11 @@ import com.sachin.url_shortener.entity.UrlMapping;
 import com.sachin.url_shortener.exception.ShortCodeNotFoundException;
 import com.sachin.url_shortener.repository.UrlMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.security.SecureRandom;
+import java.time.Duration;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +21,7 @@ public class UrlShortenerService {
     private static final int MAX_RETRIES = 5;
 
     private final UrlMappingRepository urlMappingRepository;
+    private final StringRedisTemplate redisTemplate;
 
     private final SecureRandom secureRandom = new SecureRandom();
 
@@ -48,10 +51,23 @@ public class UrlShortenerService {
 
     public String getLongUrl(String shortCode) {
 
-        return urlMappingRepository.findByShortCode(shortCode)
-                .orElseThrow(() ->
-                        new ShortCodeNotFoundException(shortCode))
-                .getLongUrl();
+        String cachedUrl =
+                redisTemplate.opsForValue().get(shortCode);
+
+        if (cachedUrl != null) {
+            return cachedUrl;
+        }
+
+        String longUrl =
+                urlMappingRepository.findByShortCode(shortCode)
+                        .orElseThrow(() ->
+                                new ShortCodeNotFoundException(shortCode))
+                        .getLongUrl();
+
+        redisTemplate.opsForValue()
+                .set(shortCode, longUrl, Duration.ofHours(24));
+
+        return longUrl;
     }
 
     private String generateShortCode() {
