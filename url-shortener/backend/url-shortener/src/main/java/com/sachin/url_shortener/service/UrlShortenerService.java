@@ -3,6 +3,7 @@ package com.sachin.url_shortener.service;
 import com.sachin.url_shortener.entity.UrlMapping;
 import com.sachin.url_shortener.exception.ShortCodeNotFoundException;
 import com.sachin.url_shortener.repository.UrlMappingRepository;
+import io.micrometer.core.instrument.Counter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -16,12 +17,19 @@ public class UrlShortenerService {
     private static final String BASE62 =
             "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
+    private static final Duration CACHE_TTL =
+            Duration.ofHours(24);
+
     private final UrlMappingRepository urlMappingRepository;
-    private final StringRedisTemplate redisTemplate;
+    private final StringRedisTemplate stringRedisTemplate;
+
+    private final Counter cacheHitCounter;
+    private final Counter cacheMissCounter;
+    private final Counter cachePutCounter;
 
     public String createShortUrl(String longUrl) {
 
-        Long nextId = redisTemplate.opsForValue()
+        Long nextId = stringRedisTemplate.opsForValue()
                 .increment("global:url:id");
 
         if (nextId == null) {
@@ -42,11 +50,15 @@ public class UrlShortenerService {
     public String getLongUrl(String shortCode) {
 
         String cachedUrl =
-                redisTemplate.opsForValue().get(shortCode);
+                stringRedisTemplate.opsForValue()
+                        .get(shortCode);
 
         if (cachedUrl != null) {
+            cacheHitCounter.increment();
             return cachedUrl;
         }
+
+        cacheMissCounter.increment();
 
         String longUrl =
                 urlMappingRepository.findByShortCode(shortCode)
@@ -54,8 +66,10 @@ public class UrlShortenerService {
                                 new ShortCodeNotFoundException(shortCode))
                         .getLongUrl();
 
-        redisTemplate.opsForValue()
-                .set(shortCode, longUrl, Duration.ofHours(24));
+        stringRedisTemplate.opsForValue()
+                .set(shortCode, longUrl, CACHE_TTL);
+
+        cachePutCounter.increment();
 
         return longUrl;
     }
@@ -69,6 +83,7 @@ public class UrlShortenerService {
         StringBuilder sb = new StringBuilder();
 
         while (value > 0) {
+
             sb.append(
                     BASE62.charAt(
                             (int) (value % BASE62.length())
