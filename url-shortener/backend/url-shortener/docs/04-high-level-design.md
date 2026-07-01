@@ -10,36 +10,7 @@ The current architecture focuses on scalability, low latency, and maintainabilit
 
 # System Architecture
 
-```text
-                        Client
-                           │
-                           ▼
-                     ┌──────────┐
-                     │  Nginx   │
-                     │ Load     │
-                     │ Balancer │
-                     └────┬─────┘
-                          │
-          ┌───────────────┼───────────────┐
-          ▼               ▼               ▼
-     ┌────────┐      ┌────────┐      ┌────────┐
-     │ App 1  │      │ App 2  │      │ App 3  │
-     └────┬───┘      └────┬───┘      └────┬───┘
-           └──────────────┼───────────────┘
-                          │
-          ┌───────────────┼───────────────┐
-          ▼                               ▼
-     ┌──────────┐                  ┌─────────────┐
-     │  Redis   │                  │ PostgreSQL │
-     └──────────┘                  └─────────────┘
-
-                 ▲
-                 │
-        Prometheus Scrapes Metrics
-                 │
-                 ▼
-             Grafana Dashboard
-```
+![System Architecture](images/architecture-v7.png)
 
 ---
 

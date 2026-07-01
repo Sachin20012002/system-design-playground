@@ -80,29 +80,7 @@ A production-inspired URL Shortener built with **Spring Boot**, **PostgreSQL**, 
 
 # Architecture
 
-```text
-                           Client
-                              │
-                              ▼
-                           Nginx
-                              │
-          ┌───────────────────┼───────────────────┐
-          ▼                   ▼                   ▼
-      Spring Boot        Spring Boot        Spring Boot
-         App 1              App 2              App 3
-              └──────────────┼──────────────┘
-                             │
-                 ┌───────────┴───────────┐
-                 ▼                       ▼
-              Redis                PostgreSQL
-
-                      ▲
-                      │
-                 Prometheus
-                      │
-                      ▼
-                   Grafana
-```
+![System Architecture](docs/images/architecture-v7.png)
 
 ---
 
