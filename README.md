@@ -6,10 +6,10 @@ Hands-on implementations of scalable distributed systems and system design conce
 
 | Project | Status | Concepts |
 |---|---|---|
-| URL Shortener | In Progress | Caching, DB Design, Scalability |
+| URL Shortener | Completed | Caching, DB Design, Scalability |
 | Chat App | Planned | WebSockets, Pub/Sub |
 | News Feed | Planned | Fanout, Feed Generation |
-| Rate Limiter | Planned | Token Bucket, Sliding Window |
+| Rate Limiter | In Progress | Token Bucket, Sliding Window |
 
 ## Goals
 
