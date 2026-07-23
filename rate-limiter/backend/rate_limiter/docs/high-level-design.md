@@ -1,58 +1,110 @@
-# High Level Design (V1)
+# High Level Design (V2)
 
-## Architecture
+## Objective
+
+Replace the Fixed Window algorithm with a Sliding Window (Sliding Log) implementation to eliminate the boundary problem
+while keeping the overall application architecture unchanged.
+
+---
+
+# Architecture
 
 ```text
-Client
-   ↓
-RateLimitFilter
-   ↓
-Controller
-   ↓
-Business Logic
+                 +----------------------+
+                 |        Client        |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |   RateLimitFilter    |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 | RateLimiterService   |
+                 +----------+-----------+
+                            |
+                            v
+          +------------------------------------+
+          | ConcurrentHashMap                  |
+          |                                    |
+          | Client IP -> ClientRequestLog      |
+          +------------------------------------+
+                            |
+                            v
+                 +----------------------+
+                 |     Controller       |
+                 +----------+-----------+
+                            |
+                            v
+                 +----------------------+
+                 |    Business Logic    |
+                 +----------------------+
 ```
 
 ---
 
-## Request Flow
+# Request Flow
 
 ```text
-Request arrives
+Incoming Request
         ↓
-Resolve client IP
+Resolve Client IP
         ↓
-Check request count
+Fetch ClientRequestLog
         ↓
-Window expired ?
+Remove Expired Timestamps
         ↓
-YES → Reset counter
-NO  → Continue
+Has Request Limit Been Reached?
         ↓
-Request count exceeded ?
+YES ─────────► Return HTTP 429
+        │
+        NO
+        │
+        ▼
+Store Current Timestamp
         ↓
-YES → Return HTTP 429
-NO  → Forward request
+Forward Request
 ```
 
 ---
 
-## Components
+# Components
 
-### RateLimitFilter
+## RateLimitFilter
 
-Responsible for intercepting incoming requests and applying rate limiting.
+Intercepts incoming requests before business logic execution and delegates rate limiting.
 
-### ClientIdentifierResolver
+---
 
-Responsible for identifying clients using:
+## ClientIdentifierResolver
 
-1. X-Forwarded-For
-2. request.getRemoteAddr()
+Identifies clients using:
 
-### RateLimiterService
+1. `X-Forwarded-For`
+2. `request.getRemoteAddr()`
 
-Responsible for implementing the Fixed Window algorithm.
+---
 
-### Controller
+## RateLimiterService
 
-Represents protected business endpoints.
+Implements the Sliding Window (Sliding Log) algorithm.
+
+Responsible for:
+
+- Maintaining request history
+- Removing expired timestamps
+- Checking request limits
+- Allowing or rejecting requests
+
+---
+
+## ClientRequestLog
+
+Maintains the request timestamps for an individual client.
+
+---
+
+## Controller
+
+Represents protected application endpoints.

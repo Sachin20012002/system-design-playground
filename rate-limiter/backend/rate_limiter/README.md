@@ -24,7 +24,7 @@ introduces new concepts while keeping the codebase simple, production-oriented, 
 # Roadmap
 
 - ✅ V1 – Fixed Window Rate Limiter
-- ⏳ V2 – Sliding Window Rate Limiter
+- ✅ V2 – Sliding Window Rate Limiter
 - ⏳ V3 – Token Bucket Rate Limiter
 - ⏳ V4 – Leaky Bucket Rate Limiter
 - ⏳ V5 – Redis Distributed Rate Limiter
@@ -56,7 +56,7 @@ introduces new concepts while keeping the codebase simple, production-oriented, 
 
 # Current Status
 
-✅ V1 Completed – Fixed Window Rate Limiter
+✅ V2 Completed – Sliding Window Rate Limiter
 
 ---
 
@@ -64,14 +64,14 @@ introduces new concepts while keeping the codebase simple, production-oriented, 
 
 ## Core Features
 
-- Fixed Window rate limiting
+- Sliding Window (Sliding Log) rate limiting
 - Client identification using IP address
 - Configurable request limits
 - HTTP 429 responses when limits are exceeded
 
 ## Implementation Details
 
-- In-memory request counters
+- In-memory request timestamp storage
 - Thread-safe implementation
 - Per-client synchronization
 - Support for `X-Forwarded-For`
@@ -85,6 +85,8 @@ introduces new concepts while keeping the codebase simple, production-oriented, 
 Client
    ↓
 RateLimitFilter
+   ↓
+RateLimiterService
    ↓
 Controller
    ↓
@@ -124,11 +126,11 @@ README.md
 
 # Current Limitations
 
-- Fixed Window boundary problem
 - Single application instance only
-- No distributed synchronization
-- No cleanup of inactive clients
-- IP-based identification may not always be accurate
+- In-memory storage
+- Higher memory usage due to per-request timestamps
+- No cleanup of inactive client entries
+- No distributed rate limiting
 
 These limitations will be addressed in future versions.
 

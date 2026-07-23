@@ -1,36 +1,36 @@
-# Low Level Design (V1)
+# Low Level Design (V2)
 
 # Data Structure
 
 ```java
-ConcurrentHashMap<String, RateLimitInfo>
+ConcurrentHashMap<String, ClientRequestLog>
 ```
 
-Key:
+Key
 
 ```text
 Client IP Address
 ```
 
-Value:
+Value
 
 ```text
-RateLimitInfo
+ClientRequestLog
 ```
 
 ---
 
-# RateLimitInfo
+# ClientRequestLog
 
 ```java
-public class RateLimitInfo {
+public class ClientRequestLog {
 
-    private AtomicInteger requestCount;
-
-    private long windowStartTime;
+    private final Deque<Long> requestTimestamps;
 
 }
 ```
+
+Each timestamp represents the time at which a request was accepted.
 
 ---
 
@@ -40,33 +40,38 @@ public class RateLimitInfo {
 {
     "192.168.1.10"
         →
-        {
-            requestCount = 3,
-            windowStartTime = 1711111111111
-        }
+        [
+            1711111110000,
+            1711111114000,
+            1711111118000,
+            1711111123000
+        ]
 }
 ```
 
 ---
 
-# Algorithm
+# Sliding Window Algorithm
+
+For every incoming request:
 
 ```text
-Request arrives
-        ↓
-Fetch client information
-        ↓
-Window expired ?
-        ↓
-YES → Reset counter
-NO  → Continue
-        ↓
-Increment request counter
-        ↓
-Counter exceeds limit ?
-        ↓
-YES → Reject request
-NO  → Allow request
+Current Time
+      ↓
+Calculate Window Start Time
+      ↓
+Remove Expired Timestamps
+      ↓
+Remaining Requests >= Limit ?
+      ↓
+YES ─────────► Reject Request
+      │
+      NO
+      │
+      ▼
+Add Current Timestamp
+      ↓
+Allow Request
 ```
 
 ---
@@ -76,68 +81,72 @@ NO  → Allow request
 The implementation uses:
 
 - ConcurrentHashMap
-- AtomicInteger
 - Per-client synchronization
 
-to ensure correctness under concurrent access.
+to safely process concurrent requests.
+
+Each client is synchronized independently, allowing multiple clients to be processed concurrently.
 
 ---
 
-# Complexity
+# Time Complexity
 
-## Time Complexity
+## Average
 
 ```text
 O(1)
 ```
 
-Average case.
+Each timestamp is:
+
+- inserted once
+- removed once
+
+making the algorithm amortized O(1).
 
 ---
 
-## Space Complexity
+# Space Complexity
 
 ```text
-O(N)
+O(N × R)
 ```
 
 where:
 
-```text
-N = number of unique clients
-```
+- **N** = number of unique clients
+- **R** = maximum requests allowed per client within the configured window
+
+Unlike the Fixed Window algorithm, memory usage grows with the number of stored timestamps.
 
 ---
 
-# Known Limitations
+# Advantages
 
-## Boundary Problem
-
-A client may send:
-
-```text
-100 requests at 10:00:59
-100 requests at 10:01:00
-```
-
-Result:
-
-```text
-200 requests within a few seconds.
-```
-
-This limitation motivates the Sliding Window algorithm.
+- Eliminates the Fixed Window boundary problem
+- Provides accurate rate limiting
+- Smooth request distribution
+- Simple implementation
+- Easy to understand and test
 
 ---
 
-## Memory Growth
+# Current Limitations
 
-Inactive client entries are never removed.
+## Higher Memory Usage
 
-Future versions may introduce cleanup mechanisms.
+Every accepted request stores a timestamp until it expires.
 
 ---
 
-## Single Instance Limitation
+## No Cleanup
 
-Counters are stored in local memory and cannot be shared across multiple application instances.
+Inactive client entries remain in memory.
+
+---
+
+## Single Application Instance
+
+Request history is stored locally and cannot be shared across multiple application instances.
+
+This will be addressed in future versions using Redis.
