@@ -13,11 +13,11 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
 
-  private final RateLimiterService rateLimiterService;
+  private final RateLimiter rateLimiter;
   private final ClientIdentifierResolver resolver;
 
-  public RateLimitFilter(RateLimiterService rateLimiterService, ClientIdentifierResolver resolver) {
-    this.rateLimiterService = rateLimiterService;
+  public RateLimitFilter(RateLimiter rateLimiter, ClientIdentifierResolver resolver) {
+    this.rateLimiter = rateLimiter;
     this.resolver = resolver;
   }
 
@@ -30,9 +30,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     String clientId = resolver.resolve(request);
 
-    boolean allowed = rateLimiterService.isAllowed(clientId);
-
-    if (!allowed) {
+    if (!rateLimiter.allow(clientId)) {
 
       response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
 

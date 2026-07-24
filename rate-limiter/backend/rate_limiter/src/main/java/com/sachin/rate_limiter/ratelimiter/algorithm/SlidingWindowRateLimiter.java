@@ -1,21 +1,24 @@
-package com.sachin.rate_limiter.ratelimiter;
+package com.sachin.rate_limiter.ratelimiter.algorithm;
 
 import com.sachin.rate_limiter.config.RateLimitProperties;
+import com.sachin.rate_limiter.ratelimiter.ClientRequestLog;
+import com.sachin.rate_limiter.ratelimiter.RateLimiter;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RateLimiterService {
+public class SlidingWindowRateLimiter implements RateLimiter {
 
   private final ConcurrentHashMap<String, ClientRequestLog> store = new ConcurrentHashMap<>();
   private final RateLimitProperties properties;
 
-  public RateLimiterService(RateLimitProperties properties) {
+  public SlidingWindowRateLimiter(RateLimitProperties properties) {
     this.properties = properties;
   }
 
-  public boolean isAllowed(String clientId) {
+  @Override
+  public boolean allow(String clientId) {
     ClientRequestLog clientRequestLog =
         store.computeIfAbsent(clientId, _ -> new ClientRequestLog());
     synchronized (clientRequestLog) {
