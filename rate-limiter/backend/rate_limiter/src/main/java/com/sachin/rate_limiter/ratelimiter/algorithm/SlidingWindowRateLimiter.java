@@ -7,7 +7,7 @@ import java.util.Deque;
 import java.util.concurrent.ConcurrentHashMap;
 import org.springframework.stereotype.Service;
 
-@Service
+@Service("slidingWindow")
 public class SlidingWindowRateLimiter implements RateLimiter {
 
   private final ConcurrentHashMap<String, ClientRequestLog> store = new ConcurrentHashMap<>();
