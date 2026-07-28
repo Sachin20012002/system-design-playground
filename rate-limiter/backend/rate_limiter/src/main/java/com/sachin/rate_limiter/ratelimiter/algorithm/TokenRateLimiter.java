@@ -31,7 +31,7 @@ public class TokenRateLimiter implements RateLimiter {
 
       double elapsedSeconds = (now - bucket.getLastRefillTime()) / 1000.0;
 
-      double earnedTokens = elapsedSeconds * properties.bucketRefillCountPerSecond();
+      double earnedTokens = elapsedSeconds * properties.bucketRatePerSecond();
 
       double updatedTokens =
           Math.min(properties.bucketCapacity(), bucket.getTokens() + earnedTokens);

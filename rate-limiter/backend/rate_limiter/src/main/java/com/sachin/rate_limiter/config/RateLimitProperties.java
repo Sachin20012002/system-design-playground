@@ -9,4 +9,4 @@ public record RateLimitProperties(
     int maxRequests,
     long windowSeconds,
     double bucketCapacity,
-    int bucketRefillCountPerSecond) {}
+    int bucketRatePerSecond) {}
