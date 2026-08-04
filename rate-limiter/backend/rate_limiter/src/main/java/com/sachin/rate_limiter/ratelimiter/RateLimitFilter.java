@@ -1,5 +1,6 @@
 package com.sachin.rate_limiter.ratelimiter;
 
+import com.sachin.rate_limiter.metrics.RateLimiterMetrics;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,10 +16,13 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
   private final RateLimiter rateLimiter;
   private final ClientIdentifierResolver resolver;
+  private final RateLimiterMetrics metrics;
 
-  public RateLimitFilter(RateLimiter rateLimiter, ClientIdentifierResolver resolver) {
+  public RateLimitFilter(
+      RateLimiter rateLimiter, ClientIdentifierResolver resolver, RateLimiterMetrics metrics) {
     this.rateLimiter = rateLimiter;
     this.resolver = resolver;
+    this.metrics = metrics;
   }
 
   @Override
@@ -44,10 +48,11 @@ public class RateLimitFilter extends OncePerRequestFilter {
                       "message": "Rate limit exceeded"
                     }
                     """);
-
+      metrics.incrementRejected();
       return;
     }
 
+    metrics.incrementAllowed();
     filterChain.doFilter(request, response);
   }
 }
