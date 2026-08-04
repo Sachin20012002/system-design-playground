@@ -26,6 +26,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
   }
 
   @Override
+  protected boolean shouldNotFilter(@NonNull HttpServletRequest request) {
+    String requestUri = request.getRequestURI();
+    return requestUri.equals("/actuator") || requestUri.startsWith("/actuator/");
+  }
+
+  @Override
   protected void doFilterInternal(
       @NonNull HttpServletRequest request,
       @NonNull HttpServletResponse response,
