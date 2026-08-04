@@ -21,12 +21,14 @@ public class RateLimiterApplication {
       RateLimitProperties properties,
       @Qualifier("slidingWindow") RateLimiter slidingWindow,
       @Qualifier("tokenBucket") RateLimiter tokenBucket,
-      @Qualifier("leakyBucket") RateLimiter leakyBucket) {
+      @Qualifier("leakyBucket") RateLimiter leakyBucket,
+      @Qualifier("redisTokenBucket") RateLimiter redisTokenBucket) {
 
     return switch (properties.algorithm()) {
       case SLIDING_WINDOW -> slidingWindow;
       case TOKEN_BUCKET -> tokenBucket;
       case LEAKY_BUCKET -> leakyBucket;
+      case REDIS_TOKEN_BUCKET -> redisTokenBucket;
     };
   }
 }
