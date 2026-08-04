@@ -1,73 +1,54 @@
 # Requirements
 
-# Functional Requirements
+## Functional requirements
 
-1. The system should limit requests per client.
+- Identify clients by IP address before controller execution.
+- Allow or reject each request through the configured rate-limiting strategy.
+- Return HTTP 429 with a JSON response when a request exceeds the limit.
+- Support configuration-driven selection among the current Sliding Window, Token Bucket, simplified Leaky Bucket, and Redis Token Bucket implementations.
+- Support configurable window, request limit, bucket capacity, and bucket rate values.
+- Share Redis Token Bucket state between multiple application instances.
+- Load balance client traffic through Nginx in the Docker deployment.
+- Export allowed and rejected request counters through the Prometheus Actuator endpoint.
+- Provide a k6 load test that accepts HTTP 200 and HTTP 429 as valid application outcomes.
 
-2. The system should allow a configurable number of requests within a configurable time window.
+## Non-functional requirements
 
-Example:
+### Correctness and concurrency
 
-```text
-5 requests / 60 seconds
-```
+- In-memory mutable client state must be updated under per-client synchronization.
+- Distributed Token Bucket read-calculate-write behavior must execute atomically in Redis.
 
-3. The system should reject requests exceeding the configured limit.
+### Configurability
 
-4. The system should return:
+- Algorithm selection and limits must be configurable without changing Java code.
+- Container-to-container addresses must use Compose service-name DNS rather than `localhost`.
 
-```http
-429 Too Many Requests
-```
+### Observability
 
-5. The system should perform rate limiting before business logic execution.
+- Prometheus must scrape each application instance independently.
+- Metrics must expose both admission decisions and the standard metrics supplied by Spring Boot and Micrometer.
 
-6. The system should identify clients using IP address.
+### Local reproducibility
 
----
+- Docker Compose must define two application services, Nginx, Redis, Prometheus, and Grafana.
+- Persistent Redis and Grafana data must use named volumes.
+- Compose resources must rely on project namespacing rather than explicit container names.
 
-# Non Functional Requirements
+## Current scope boundaries
 
-## Low Latency
+The repository does not currently implement:
 
-Rate limiting checks should be performed with minimal overhead.
+- Authentication-, user-, tenant-, or API-key-based limits
+- A currently selectable Fixed Window strategy
+- An asynchronous Leaky Bucket request queue
+- Redis replication, Redis Cluster, or Redis high availability
+- Redis authentication or encrypted Redis transport
+- TLS termination or application authentication
+- Kubernetes or AKS deployment
+- CI/CD deployment automation
+- Alert rules
+- Provisioned Grafana datasources or dashboards
+- Comprehensive algorithm, concurrency, Redis, or end-to-end tests
 
----
-
-## Thread Safety
-
-Concurrent requests from the same client should be handled correctly.
-
----
-
-## High Throughput
-
-The implementation should support a large number of requests.
-
----
-
-## Scalability
-
-The current version targets a single application instance.
-
-Future versions will support distributed deployments.
-
----
-
-## Configurability
-
-Request limits and window duration should be configurable.
-
----
-
-# Out Of Scope (V1)
-
-- Redis
-- Distributed rate limiting
-- Authentication based limits
-- API Key limits
-- Sliding Window
-- Token Bucket
-- Leaky Bucket
-- Monitoring
-- Performance testing
+These boundaries should not be interpreted as implemented roadmap commitments.
