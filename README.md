@@ -11,6 +11,10 @@ Hands-on implementations of scalable distributed systems and system design conce
 | News Feed | Planned | Fanout, Feed Generation |
 | [Rate Limiter](rate-limiter/backend/rate_limiter/README.md) | Complete for Current Learning Scope | Sliding Window, Token Bucket, Leaky Bucket, Redis |
 
+## Learning Resources
+
+- [Backend Engineering Handbook](backend-handbook/README.md) — reusable concepts, revision questions, project examples, and system-design interview guidance.
+
 ## Goals
 
 - Learn distributed systems through implementation
