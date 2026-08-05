@@ -6,10 +6,10 @@ Hands-on implementations of scalable distributed systems and system design conce
 
 | Project | Status | Concepts |
 |---|---|---|
-| URL Shortener | Completed | Caching, DB Design, Scalability |
+| URL Shortener | Complete for Current Learning Scope | Caching, DB Design, Scalability |
 | Chat App | Planned | WebSockets, Pub/Sub |
 | News Feed | Planned | Fanout, Feed Generation |
-| Rate Limiter | In Progress | Token Bucket, Sliding Window |
+| Rate Limiter | Complete for Current Learning Scope | Sliding Window, Token Bucket, Leaky Bucket, Redis |
 
 ## Goals
 
@@ -22,10 +22,9 @@ Hands-on implementations of scalable distributed systems and system design conce
 
 ```bash
 system-design-playground/
-├── url-shortener/
-├── chat-app/
-├── news-feed/
-└── shared-projects/
+├── backend-handbook/
+├── rate-limiter/
+└── url-shortener/
 ```
 
 ## Topics Covered
@@ -34,10 +33,10 @@ system-design-playground/
 - Scalability
 - Caching
 - Load Balancing
-- Message Queues
 - Database Design
 - API Design
-- Event-Driven Architecture
+- Rate Limiting
+- Observability
 
 ## Status
 

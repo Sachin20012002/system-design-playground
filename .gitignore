@@ -1,0 +1,12 @@
+# IntelliJ IDEA project files
+/.idea/
+
+# Local Maven wrapper/bootstrap files
+/rate-limiter/backend/rate_limiter/.gitattributes
+/rate-limiter/backend/rate_limiter/.mvn/
+/rate-limiter/backend/rate_limiter/mvnw
+/rate-limiter/backend/rate_limiter/mvnw.cmd
+
+# Local documentation and generated performance data
+/url-shortener/backend/url-shortener/AI_CONTEXT.md
+/url-shortener/backend/url-shortener/performance/generated-shortcodes.json

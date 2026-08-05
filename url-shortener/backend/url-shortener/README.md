@@ -19,7 +19,7 @@ A production-inspired URL Shortener built with **Spring Boot**, **PostgreSQL**, 
 
 * Redis Cache-Aside pattern
 * Redis-based distributed ID generation (`INCR`)
-* Configurable cache TTL
+* 24-hour cache TTL
 * Custom cache hit/miss metrics
 
 ---
@@ -39,7 +39,7 @@ A production-inspired URL Shortener built with **Spring Boot**, **PostgreSQL**, 
 * Spring Boot Actuator
 * Micrometer metrics
 * Prometheus monitoring
-* Grafana dashboards
+* Grafana for interactive metric exploration
 
 ---
 
@@ -109,9 +109,10 @@ Clone the repository.
 git clone <repository-url>
 ```
 
-Start the complete environment.
+Package the application, then start the complete environment.
 
 ```bash
+mvn clean package
 docker compose up --build
 ```
 
@@ -123,6 +124,8 @@ The application will start with:
 * Nginx
 * Prometheus
 * Grafana
+
+The repository does not provision a Grafana datasource or dashboards; configure Prometheus as the datasource through the Grafana UI.
 
 ---
 

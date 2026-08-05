@@ -77,9 +77,9 @@ http://app3:8080/actuator/prometheus
 
 ## Grafana
 
-Grafana connects to Prometheus and visualizes collected metrics through dashboards.
+Grafana can connect to Prometheus and visualize collected metrics through dashboards.
 
-The current setup allows application metrics to be explored interactively.
+The repository starts Grafana but does not provision its Prometheus datasource or dashboards. These must be configured through the Grafana UI.
 
 ---
 
@@ -137,7 +137,7 @@ Spring Boot Actuator
 Prometheus
       │
       ▼
-Grafana Dashboard
+Grafana (after datasource configuration)
 ```
 
 ---

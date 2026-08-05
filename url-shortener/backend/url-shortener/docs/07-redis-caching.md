@@ -260,4 +260,4 @@ These capabilities are outside the scope of the current project.
 
 Redis plays a key role in the URL Shortener architecture by providing distributed ID generation and low-latency URL caching.
 
-The combination of atomic counters, Cache-Aside caching, and configurable TTL improves application performance while supporting horizontal scaling across multiple application instances.
+The combination of atomic counters, Cache-Aside caching, and a 24-hour TTL improves application performance while supporting horizontal scaling across multiple application instances.
