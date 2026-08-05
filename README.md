@@ -6,10 +6,10 @@ Hands-on implementations of scalable distributed systems and system design conce
 
 | Project | Status | Concepts |
 |---|---|---|
-| URL Shortener | Complete for Current Learning Scope | Caching, DB Design, Scalability |
+| [URL Shortener](url-shortener/backend/url-shortener/README.md) | Complete for Current Learning Scope | Caching, DB Design, Scalability |
 | Chat App | Planned | WebSockets, Pub/Sub |
 | News Feed | Planned | Fanout, Feed Generation |
-| Rate Limiter | Complete for Current Learning Scope | Sliding Window, Token Bucket, Leaky Bucket, Redis |
+| [Rate Limiter](rate-limiter/backend/rate_limiter/README.md) | Complete for Current Learning Scope | Sliding Window, Token Bucket, Leaky Bucket, Redis |
 
 ## Goals
 

@@ -1,5 +1,7 @@
 # Low-Level Design
 
+> Reusable background: [Rate-limiting algorithms](../../../../backend-handbook/rate-limiting/rate-limiting.md) and [Redis atomicity and Lua](../../../../backend-handbook/redis/atomicity-and-lua.md). This page remains the source for the current Java and Lua implementation.
+
 ## Strategy selection
 
 ```java

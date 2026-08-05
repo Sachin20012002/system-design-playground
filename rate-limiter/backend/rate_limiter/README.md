@@ -172,9 +172,12 @@ Prometheus also receives the JVM and standard Spring Boot metrics exported by Mi
 |-- nginx/nginx.conf
 |-- prometheus/prometheus.yml
 |-- docs/
+|   |-- README.md
 |   |-- high-level-design.md
 |   |-- low-level-design.md
 |   |-- requirements.md
+|   |-- PROJECT_NOTES.md
+|   |-- INTERVIEW_NOTES.md
 |   `-- future-improvements.md
 `-- src/
     |-- main/java/com/sachin/rate_limiter/

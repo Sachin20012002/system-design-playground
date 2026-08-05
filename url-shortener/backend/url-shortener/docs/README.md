@@ -6,12 +6,55 @@ This directory contains the complete engineering documentation for the **URL Sho
 
 While the source code demonstrates **how** the system is implemented, these documents explain **why** each architectural decision was made, the trade-offs considered, and how the system evolves toward a production-ready distributed service.
 
+Reusable explanations of backend technologies and patterns live in the [Backend Engineering Handbook](../../../../backend-handbook/README.md). These project documents remain the source for URL Shortener behavior, configuration, measurements, and design decisions.
+
 The documentation is intended to serve as:
 
 - An engineering design reference
 - A system design interview preparation guide
 - A knowledge base for future enhancements
 - A record of architectural decisions made throughout the project
+
+## Choose a study mode
+
+### Quick revision — 15 to 20 minutes
+
+1. Review the [requirements](01-requirements.md#functional-requirements) and [API overview](03-api-design.md#api-overview).
+2. Draw the [high-level architecture](04-high-level-design.md#system-architecture) from memory.
+3. Explain the [creation and redirect flows](05-low-level-design.md#create-url-flow).
+4. Recall the [database indexes](06-database-design.md#database-indexes) and [Cache-Aside flow](07-redis-caching.md#cache-pattern).
+5. Answer the [interview questions](14-interview-questions.md) without reading the answers first.
+
+### System-design interview practice — 30 to 45 minutes
+
+1. Use the [system-design interview framework](../../../../backend-handbook/guides/system-design-interview-framework.md).
+2. State requirements and calculate the key estimates in [capacity estimation](02-capacity-estimation.md).
+3. Present the API, schema, high-level design, and two critical request flows.
+4. Explain caching, horizontal scaling, bottlenecks, and failure modes.
+5. Close with [trade-offs](12-trade-offs.md) and [future improvements](13-future-improvements.md), clearly separating current behavior from proposals.
+
+### Deep implementation study
+
+Read documents 01 through 13 in order while tracing the corresponding source and infrastructure files. Use document 14 afterward for active recall rather than as the first explanation of a topic.
+
+## Fast reference
+
+| Need | Go to |
+| --- | --- |
+| Scope and success criteria | [Requirements](01-requirements.md) |
+| Traffic, storage, and bandwidth assumptions | [Capacity estimation](02-capacity-estimation.md) |
+| Endpoints and status codes | [API design](03-api-design.md) |
+| Components and request topology | [High-level design](04-high-level-design.md) |
+| Classes and sequence flows | [Low-level design](05-low-level-design.md) |
+| Schema, constraints, and indexes | [Database design](06-database-design.md) |
+| Redis keys, TTL, and Cache-Aside | [Redis caching](07-redis-caching.md) |
+| Nginx and application replicas | [Load balancing](08-load-balancing.md) |
+| Workloads and benchmark context | [Performance testing](09-performance-testing.md) |
+| Metrics and scrape topology | [Observability](10-observability.md) |
+| Bottlenecks and scaling options | [Scaling strategies](11-scaling-strategies.md) |
+| Decision reasoning | [Trade-offs](12-trade-offs.md) |
+| Explicitly unimplemented ideas | [Future improvements](13-future-improvements.md) |
+| Active recall | [Interview questions](14-interview-questions.md) |
 
 ---
 
@@ -83,7 +126,7 @@ All diagrams are maintained in Draw.io format so they can be updated as the proj
 | V3 | Redis caching and distributed ID generation using Redis INCR |
 | V4 | Dockerized application |
 | V5 | Docker Compose, multiple application instances and Nginx load balancing |
-| V6 | Performance testing with k6, Prometheus metrics and Grafana dashboards |
+| V6 | Performance testing with k6, Prometheus metrics and Grafana service |
 | V7 | Cache optimization, database indexing, engineering documentation and architectural improvements |
 | V8 | Final documentation, diagrams, interview preparation and production refinements |
 

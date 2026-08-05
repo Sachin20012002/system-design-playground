@@ -1,5 +1,7 @@
 # 07 - Redis Caching
 
+> Reusable background: [Redis](../../../../backend-handbook/redis/redis.md), [Cache-Aside](../../../../backend-handbook/redis/cache-aside.md), and [Redis atomicity](../../../../backend-handbook/redis/atomicity-and-lua.md). This page documents how the URL Shortener applies those concepts.
+
 # Introduction
 
 Redis is used to improve the performance and scalability of the URL Shortener application.

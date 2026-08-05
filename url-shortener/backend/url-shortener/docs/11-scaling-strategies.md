@@ -1,5 +1,7 @@
 # 11 - Scaling Strategies
 
+> Reusable background: [Horizontal scaling](../../../../backend-handbook/architecture/horizontal-scaling.md) and [stateless services and shared state](../../../../backend-handbook/architecture/stateless-services-and-shared-state.md). This page evaluates the URL Shortener's current scaling properties.
+
 # Introduction
 
 Scalability is the ability of a system to handle increasing workloads by efficiently utilizing additional resources.

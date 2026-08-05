@@ -1,5 +1,7 @@
 # 08 - Load Balancing
 
+> Reusable background: [Nginx](../../../../backend-handbook/nginx/nginx.md), [horizontal scaling](../../../../backend-handbook/architecture/horizontal-scaling.md), and [stateless services](../../../../backend-handbook/architecture/stateless-services-and-shared-state.md). This page documents the URL Shortener deployment.
+
 # Introduction
 
 The URL Shortener application uses Nginx as a reverse proxy and load balancer to distribute incoming requests across multiple Spring Boot application instances.

@@ -1,5 +1,7 @@
 # 09 - Performance Testing
 
+> Reusable background: [Load testing with k6](../../../../backend-handbook/performance/load-testing-with-k6.md). This page retains the URL Shortener workloads, environment, and measured results.
+
 # Introduction
 
 Performance testing was conducted to evaluate the throughput and response times of the URL Shortener application under concurrent load.

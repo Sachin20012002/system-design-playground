@@ -1,5 +1,7 @@
 # High-Level Design
 
+> Reusable background: [Rate limiting](../../../../backend-handbook/rate-limiting/rate-limiting.md), [stateless services](../../../../backend-handbook/architecture/stateless-services-and-shared-state.md), and [Redis atomicity](../../../../backend-handbook/redis/atomicity-and-lua.md). This page documents the deployed Rate Limiter architecture.
+
 ## Objective
 
 The current system demonstrates rate limiting across two Spring Boot instances that share Redis state. Nginx provides one entry point, while Prometheus and Grafana provide local observability.

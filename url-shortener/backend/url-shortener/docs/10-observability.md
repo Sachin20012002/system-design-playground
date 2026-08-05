@@ -1,5 +1,7 @@
 # 10 - Observability
 
+> Reusable background: [Application metrics stack](../../../../backend-handbook/observability/metrics-stack.md). This page documents the URL Shortener metrics and scrape topology.
+
 # Introduction
 
 Observability enables engineers to understand the health and behavior of an application while it is running.

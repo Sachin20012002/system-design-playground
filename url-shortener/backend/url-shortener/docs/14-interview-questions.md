@@ -1,5 +1,14 @@
 # 14 - Interview Questions
 
+These questions explain and defend the URL Shortener implementation. Use the [Backend Engineering Handbook](../../../../backend-handbook/README.md) for technology-neutral revision questions and mental models.
+
+## How to revise with this file
+
+1. Read only the question and answer aloud in under two minutes.
+2. Include the requirement, chosen design, benefit, and trade-off.
+3. Check the written answer and the linked design document only for gaps.
+4. Mark questions you could not answer and repeat them later; do not reread all forty answers each time.
+
 # Introduction
 
 This document contains interview questions based on the design and implementation of the URL Shortener project.

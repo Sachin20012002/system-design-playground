@@ -2,6 +2,15 @@
 
 Detailed questions and answers based on the current repository. Fixed Window is discussed as a historical milestone, not as a currently selectable strategy.
 
+Use the [Backend Engineering Handbook](../../../../backend-handbook/README.md) for general concept review. These notes focus on how to explain and defend this repository's implementation choices.
+
+## How to revise with this file
+
+1. Answer each question aloud before reading its answer.
+2. For algorithms, state the model, time and memory cost, burst behavior, and concurrency boundary.
+3. For design choices, state the requirement, choice, benefit, trade-off, and production limitation.
+4. Review only missed questions on the next pass instead of rereading the file linearly.
+
 ## General design
 
 ### Why does a service need rate limiting?
@@ -201,6 +210,8 @@ The admission path must read state, calculate refill, decide, update the hash, a
 
 ## Docker and Compose
 
+General model: [Docker](../../../../backend-handbook/docker/docker.md) and [Docker Compose](../../../../backend-handbook/docker/docker-compose.md). The answers below connect that model to this stack.
+
 ### What is the difference between an image and a container?
 
 An image is an immutable packaged filesystem and startup definition. A container is a running or stopped instance created from an image, with its own writable layer and network identity.
@@ -237,6 +248,8 @@ Named volumes are also project-scoped by default. Two differently named Compose 
 
 ## Observability
 
+General model: [Application metrics stack](../../../../backend-handbook/observability/metrics-stack.md). The answers below cover this project's instrumentation and topology.
+
 ### What does Micrometer do?
 
 Micrometer is the instrumentation facade used by Spring Boot. `RateLimiterMetrics` registers allowed and rejected counters through `MeterRegistry` without coupling application code directly to Prometheus APIs.
@@ -268,6 +281,8 @@ Depending on a production architecture, teams might use Azure Monitor, Applicati
 Backend engineers should still understand metric types, labels, aggregation, scrape behavior, and actionable signals even when a platform team operates the monitoring stack.
 
 ## k6 testing
+
+General model: [Load testing with k6](../../../../backend-handbook/performance/load-testing-with-k6.md). The answers below explain this project's expected outcomes and script behavior.
 
 ### What is the difference between smoke, load, and stress testing?
 
